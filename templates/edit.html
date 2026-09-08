@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit FAQ - AI FAQ Assistant</title>
+</head>
+
+<body>
+
+    <h1>Edit FAQ</h1>
+
+    <form action="/admin/edit/{{ faq[0] }}" method="POST">
+
+        <div>
+            <label>Question:</label>
+            <br>
+
+            <input
+                type="text"
+                name="question"
+                value="{{ faq[1] }}"
+                required
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label>Answer:</label>
+            <br>
+
+            <textarea
+                name="answer"
+                required
+            >{{ faq[2] }}</textarea>
+        </div>
+
+        <br>
+
+        <button type="submit">Update FAQ</button>
+
+    </form>
+
+    <br>
+
+    <a href="/admin">Back to Admin Panel</a>
+
+</body>
+
+</html>

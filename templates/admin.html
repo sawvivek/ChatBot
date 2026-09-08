@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Panel - AI FAQ Assistant</title>
+</head>
+
+<body>
+
+    <h1>AI FAQ Assistant - Admin Panel</h1>
+
+    <p>Manage FAQ Knowledge Base</p>
+    <h2>Add New FAQ</h2>
+
+<form action="/admin/add" method="POST">
+
+    <div>
+        <label>Question:</label>
+        <br>
+
+        <input
+            type="text"
+            name="question"
+            placeholder="Enter question"
+            required
+        >
+    </div>
+
+    <br>
+
+    <div>
+        <label>Answer:</label>
+        <br>
+
+        <textarea
+            name="answer"
+            placeholder="Enter answer"
+            required
+        ></textarea>
+    </div>
+
+    <br>
+
+    <button type="submit">Add FAQ</button>
+
+</form>
+
+<hr>
+
+    <table border="1" cellpadding="10">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Action</th>
+            </tr>
+            
+        </thead>
+
+        <tbody>
+
+            {% for faq in faqs %}
+
+            <tr>
+                <td>{{ faq[0] }}</td>
+                <td>{{ faq[1] }}</td>
+                <td>{{ faq[2] }}</td>
+                <td>
+
+                    <a href="/admin/edit/{{ faq[0] }}">Edit</a>
+
+                    <form
+                        action="/admin/delete/{{ faq[0] }}"
+                        method="POST"
+                        style="display:inline;"
+                    >
+
+                        <button type="submit">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </td>
+            </tr>
+</tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

@@ -1,24 +1,22 @@
+from database import get_all_faqs
+
+
 def load_faqs():
+    rows = get_all_faqs()
+
     faqs = []
 
-    with open("data/faqs.txt", "r", encoding="utf-8") as file:
+    for row in rows:
+        faq = {
+            "id": row[0],
+            "question": row[1],
+            "answer": row[2]
+        }
 
-        for line in file:
-            line = line.strip()
-
-            if not line:
-                continue
-
-            question, answer = line.split("|", 1)
-
-            faq = {
-                "question": question,
-                "answer": answer
-            }
-
-            faqs.append(faq)
+        faqs.append(faq)
 
     return faqs
+
 
 if __name__ == "__main__":
     faqs = load_faqs()
