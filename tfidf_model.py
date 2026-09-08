@@ -4,13 +4,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from faq_data import load_faqs
 
 
-# ==========================================
-# PART 33 — Load FAQs
-# ==========================================
-
+# Load FAQ data
 faqs = load_faqs()
-
-print("Total FAQs:", len(faqs))
 
 
 # Extract FAQ questions
@@ -20,75 +15,67 @@ for faq in faqs:
     questions.append(faq["question"])
 
 
-print("Questions:", questions)
-
-
-# ==========================================
-# PART 34 — Create TF-IDF Matrix
-# ==========================================
-
-vectorizer = TfidfVectorizer()
+# Create TF-IDF model
+vectorizer = TfidfVectorizer(stop_words="english")
 
 tfidf_matrix = vectorizer.fit_transform(questions)
 
 
-# ==========================================
-# PART 35 — User Question
-# ==========================================
+# Function to find the best answer
+def find_best_answer(user_question):
 
-user_question = "What is the weather of Thane today?"
-
-print("User Question:", user_question)
-
-user_vector = vectorizer.transform([user_question])
-
-# Diagnostic: show the user's TF-IDF vector
-print("User Vector:", user_vector.toarray())
+    # Convert user question into TF-IDF vector
+    user_vector = vectorizer.transform([user_question])
 
 
-# ==========================================
-# PART 36 — Calculate Similarity
-# ==========================================
-
-similarity_scores = cosine_similarity(
-    user_vector,
-    tfidf_matrix
-)
-
-print("Similarity Scores:", similarity_scores)
+    # Calculate cosine similarity
+    similarity_scores = cosine_similarity(
+        user_vector,
+        tfidf_matrix
+    )
 
 
-# ==========================================
-# Find Best Match
-# ==========================================
-
-best_match_index = similarity_scores.argmax()
-
-print("Best Match Index:", best_match_index)
+    # Find best matching FAQ
+    best_match_index = similarity_scores.argmax()
 
 
-# ==========================================
-# PART 37 — Retrieve Best FAQ
-# ==========================================
-
-best_faq = faqs[best_match_index]
-
-best_score = similarity_scores[0][best_match_index]
-
-print("Similarity:", best_score)
+    # Get best FAQ
+    best_faq = faqs[best_match_index]
 
 
-# ==========================================
-# PART 44 — Similarity Threshold
-# ==========================================
+    # Get similarity score
+    best_score = similarity_scores[0][best_match_index]
 
-threshold = 0.2
 
-if best_score < threshold:
+    # Similarity threshold
+    threshold = 0.2
 
-    print("Sorry, I could not find a relevant answer.")
 
-else:
+    # Check whether the match is good enough
+    if best_score < threshold:
 
-    print("Question:", best_faq["question"])
-    print("Answer:", best_faq["answer"])
+        return "Sorry, I could not find a relevant answer."
+
+
+    return best_faq["answer"]
+
+
+# # Test the function
+# if __name__ == "__main__":
+
+#     question = "What is the weather today?"
+
+#     user_vector = vectorizer.transform([question])
+
+#     similarity_scores = cosine_similarity(
+#         user_vector,
+#         tfidf_matrix
+#     )
+
+#     print("Question:", question)
+#     print("Similarity Scores:", similarity_scores)
+#     print("Best Match Index:", similarity_scores.argmax())
+
+#     answer = find_best_answer(question)
+
+#     print("Answer:", answer)
