@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI FAQ Assistant</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+            <h1>AI FAQ Assistant</h1>
+            <p>Ask me anything about admissions, fees, courses, and college information.</p>
+        </div>
+
+        <div class="chat-box">
+
+            <div class="bot-message">
+                <strong>Bot:</strong>
+                <span>Hello! How can I help you?</span>
+            </div>
+
+            <div id="answer-area"></div>
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="question"
+                placeholder="Type your question..."
+            >
+
+            <button onclick="askQuestion()">Ask</button>
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
