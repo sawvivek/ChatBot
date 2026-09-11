@@ -1,134 +1,156 @@
 # AI FAQ Assistant
 
-An NLP-based FAQ Assistant developed using Python and Flask.
+An NLP-based FAQ Assistant developed using Python, Flask, SQLite, TF-IDF and Cosine Similarity.
 
 ## Project Goal
 
-The project aims to develop an FAQ chatbot that can understand a user's question and return the most relevant answer from a predefined FAQ knowledge base.
+The project aims to develop an FAQ chatbot that can understand a user's question and return the most relevant answer from an FAQ knowledge base.
 
-The chatbot currently uses a retrieval-based NLP approach using TF-IDF and Cosine Similarity.
+The system also provides an admin interface where FAQs can be added, edited and deleted dynamically.
 
-## Technologies
+## Technologies Used
 
 * Python
-* NLP
+* Flask
+* SQLite
 * NLTK
 * scikit-learn
 * TF-IDF
 * Cosine Similarity
-* Flask
 * HTML
 * CSS
 * JavaScript
+
+## Current Features
+
+### User Features
+
+* Ask FAQ questions through a web interface
+* Receive the most relevant answer
+* Supports different wording of questions
+* Handles unknown questions using a similarity threshold
+* Interactive chatbot interface
+* Press Enter to ask a question
+
+### Admin Features
+
+* View all FAQs
+* Add new FAQs
+* Edit existing FAQs
+* Delete FAQs
+* Automatically refresh the TF-IDF model after FAQ changes
+
+## Database
+
+The FAQ data is stored in a SQLite database.
+
+Database file:
+
+```text
+faq.db
+```
+
+The database contains an `faqs` table with:
+
+* `id`
+* `question`
+* `answer`
+
+## NLP System
+
+The chatbot uses a retrieval-based NLP approach.
+
+The process is:
+
+```text
+User Question
+      ↓
+TF-IDF Vectorization
+      ↓
+Cosine Similarity
+      ↓
+Find Most Similar FAQ
+      ↓
+Check Similarity Threshold
+      ↓
+Return Answer
+```
+
+## Application Architecture
+
+```text
+                    ┌───────────────┐
+                    │    Browser    │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │    Flask      │
+                    │   Web App     │
+                    └───────┬───────┘
+                            │
+                            ▼
+                  ┌───────────────────┐
+                  │    TF-IDF +       │
+                  │ Cosine Similarity │
+                  └─────────┬─────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │    SQLite     │
+                    │   FAQ Data    │
+                    └───────────────┘
+```
+
+### Admin Architecture
+
+```text
+Admin
+  ↓
+Admin Web Interface
+  ↓
+Flask
+  ↓
+SQLite
+  ↓
+FAQ Database
+  ↓
+TF-IDF Model Refresh
+```
 
 ## Project Structure
 
 ```text
 AI-FAQ-Assistant/
 │
-├── app.py
-├── chatbot.py
-├── faq_data.py
-├── nlp_preprocessing.py
-├── test_nlp.py
-├── tfidf_model.py
-├── requirements.txt
-├── .gitignore
-├── README.md
+├── venv/
 │
 ├── data/
 │   └── faqs.txt
 │
 ├── templates/
-│   └── index.html
+│   ├── index.html
+│   ├── admin.html
+│   └── edit.html
 │
-└── static/
-    ├── style.css
-    └── script.js
+├── static/
+│   ├── style.css
+│   └── script.js
+│
+├── app.py
+├── database.py
+├── faq_data.py
+├── nlp_preprocessing.py
+├── test_nlp.py
+├── tfidf_model.py
+├── chatbot.py
+├── faq.db
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
 
-## How It Works
-
-The chatbot follows a retrieval-based approach:
-
-```text
-User
- ↓
-Web Interface
- ↓
-JavaScript
- ↓
-Flask /ask API
- ↓
-TF-IDF
- ↓
-Cosine Similarity
- ↓
-FAQ Knowledge Base
- ↓
-Best Matching FAQ
- ↓
-Answer
- ↓
-Web Interface
-```
-
-### Processing Steps
-
-1. User enters a question through the web interface.
-2. JavaScript sends the question to the Flask `/ask` API.
-3. Flask receives the question.
-4. The user's question is converted into a TF-IDF vector.
-5. Cosine Similarity compares the user's question with the FAQ questions.
-6. The FAQ with the highest similarity score is selected.
-7. If the similarity score is below the threshold, a fallback message is returned.
-8. Flask sends the answer back to JavaScript.
-9. JavaScript displays the answer in the chatbot interface.
-
-## Current Features
-
-* FAQ knowledge base
-* NLP preprocessing
-* TF-IDF-based text representation
-* Cosine Similarity
-* Best FAQ matching
-* Similarity threshold
-* Flask web interface
-* `/ask` API endpoint
-* Interactive chatbot
-* User and bot messages
-* Enter-to-send support
-* Greeting handling
-* Empty input handling
-* Unknown-question handling
-* Case-insensitive input
-* Input whitespace handling
-* Scrollable chat area
-
-## Example Questions
-
-The chatbot can answer questions related to:
-
-* Admission
-* Admission requirements
-* Required documents
-* Admission status
-* Admission fees
-* College contact information
-* College location
-* Available courses
-
-### Example
-
-```text
-User:
-How do I apply for admission?
-
-Bot:
-You can apply for admission through the college admission portal.
-```
-
-## Running the Project
+## How to Run
 
 Activate the virtual environment:
 
@@ -145,28 +167,126 @@ python app.py
 Open the application in a browser:
 
 ```text
-http://127.0.0.1:5000
+http://127.0.0.1:5000/
+```
+
+Open the admin panel:
+
+```text
+http://127.0.0.1:5000/admin
+```
+
+## FAQ Management
+
+The admin panel supports:
+
+```text
+Add FAQ
+   ↓
+SQLite
+   ↓
+TF-IDF Model Refresh
+   ↓
+Chatbot can answer the new FAQ
+```
+
+Similarly:
+
+```text
+Edit FAQ
+   ↓
+SQLite Update
+   ↓
+TF-IDF Model Refresh
+   ↓
+Chatbot uses updated answer
+```
+
+And:
+
+```text
+Delete FAQ
+   ↓
+SQLite Delete
+   ↓
+TF-IDF Model Refresh
+   ↓
+Deleted FAQ is no longer available
 ```
 
 ## Current Limitation
 
-The current chatbot uses TF-IDF and Cosine Similarity. Therefore, it mainly depends on word overlap between the user's question and the FAQ questions.
+The chatbot uses TF-IDF and Cosine Similarity.
 
-Very short questions or questions using completely different vocabulary may not always produce the expected answer.
+Therefore, it mainly depends on similarity between words in the user's question and the stored FAQ questions.
+
+It may not understand deeper semantic meaning.
+
+For example, two questions with similar meanings but very different vocabulary may not always produce the expected answer.
 
 ## Future Improvements
 
-* Improve NLP preprocessing
-* Add more FAQ data
-* Improve semantic understanding
-* Add database integration
-* Add authentication
-* Add student and company/employee user interfaces
-* Add RAG-based retrieval
-* Add an LLM for more advanced responses
+Possible future improvements include:
+
+* Better NLP preprocessing
+* Improved semantic similarity
+* Larger FAQ knowledge base
+* User and admin authentication
+* Conversation history
+* Better error handling
+* RAG-based question answering
+* Vector database
+* LLM integration
+* Improved UI
+* Deployment to a cloud platform
+
+## Development Progress
+
+### Day 1
+
+* Project setup
+* Python environment
+* Required packages
+* Git repository
+
+### Day 2
+
+* FAQ dataset
+* NLP preprocessing
+* NLTK
+* Stopword removal
+
+### Day 3
+
+* TF-IDF
+* Cosine Similarity
+* Similarity threshold
+* FAQ retrieval
+
+### Day 4
+
+* Interactive command-line chatbot
+* Conversation handling
+
+### Day 5
+
+* Flask web application
+* HTML/CSS/JavaScript interface
+* `/ask` API
+
+### Day 6
+
+* SQLite database
+* FAQ database management
+* Admin interface
+* Add FAQ
+* Edit FAQ
+* Delete FAQ
+* Dynamic TF-IDF model refresh
+* Complete system testing
 
 ## Current Status
 
-**Day 5 - Flask web interface completed.**
+**Day 6 completed successfully.**
 
-The NLP-based FAQ engine from Day 3 and the interactive chatbot from Day 4 have been successfully connected to a Flask web interface.
+The project now has a working web-based NLP FAQ Assistant with SQLite database storage and an admin CRUD interface.
